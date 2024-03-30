@@ -1,0 +1,7 @@
+# Python ENV dir
+.venv
+
+# Work dirs
+cert
+certbot
+tmp

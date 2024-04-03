@@ -86,7 +86,7 @@ def parse_cert(cert_path: str) -> x509.Certificate:
 
     :param str cert_path: The path of the SSL certificate
     :return: The certificate object
-    :rtype: x509.Certificate
+    :rtype: cryptography.x509.Certificate
     :raises IOError: if the certificate file can not be read
     :raises ValueError: if the certificate file is not a valid PEM certificate
     """
@@ -99,6 +99,11 @@ def parse_cert(cert_path: str) -> x509.Certificate:
 class TLSA_data(NamedTuple):
     """
     TLSA DNS record data
+
+    :param int usage: The usage of the certificate [0-3]
+    :param int selector: The selector of the certificate [0-1]
+    :param int matching_type: The matching type of the certificate [0-2]
+    :param str certificate: The certificate hash
     """
 
     usage: int
@@ -110,6 +115,10 @@ class TLSA_data(NamedTuple):
 class TLSA_record(NamedTuple):
     """
     TLSA DNS record
+
+    :param str name: The name of the DNS entry
+    :param TLSA_data data: The data of the TLSA record
+    :param str type: The type of the DNS entry
     """
 
     name: str
@@ -191,7 +200,7 @@ def create_tlsa_records(cert: x509.Certificate, h3: bool = False) -> list[TLSA_r
     """
     Create TLSA DNS records for a certificate
 
-    :param x509.Certificate cert: The SSL certificate
+    :param cryptography.x509.Certificate cert: The SSL certificate
     :param bool h3: Toggles the creation of TLSA DNS entries for HTTP3 clients
     :return: The TLSA DNS records
     :rtype: list[TLSA_record]

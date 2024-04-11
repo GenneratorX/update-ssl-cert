@@ -146,7 +146,7 @@ def delete_dns_records(
 
     :param CloudFlare.CloudFlare cf: The cloudflare client object
     :param str zone_id: The zone id to delete DNS records from
-    :param list[str] record_ids: A list of DNS record IDs to delete
+    :param list[str] record_ids: The list of DNS record IDs to delete
     :return: The errors encountered during the deletion of the DNS records
     :rtype: dict[str, CloudFlare.exceptions.CloudFlareAPIError]
     """

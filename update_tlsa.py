@@ -3,6 +3,7 @@ import argparse
 import hashlib
 import logging
 import os
+import re
 import sys
 
 from concurrent import futures
@@ -61,10 +62,8 @@ def main():
         log.critical("could not get DNS records from zone. Reason: %s", e)
         sys.exit(1)
 
-    log.info("found %d TLSA DNS records to delete", len(dns_records))
-    record_ids: list[str] = []
-    for record in dns_records:
-        record_ids.append(record["id"])
+    record_ids = filter_dns_records(dns_records, cert)
+    log.info("found %d TLSA DNS records (%d will be removed)", len(dns_records), len(record_ids))
 
     if len(record_ids) != 0:
         delete_errors = delete_dns_records(cf, zone_id, record_ids)
@@ -165,6 +164,29 @@ def delete_dns_records(
                 delete_errors[record_id] = e
 
     return delete_errors
+
+
+def filter_dns_records(dns_records: list[dict], cert: x509.Certificate) -> list[str]:
+    """
+    Filter DNS records based on a SSL certificate
+
+    :param list[dict] dns_records: The DNS records
+    :param cryptography.x509.Certificate cert: The SSL certificate
+    :return: The record IDs of DNS records that match the domain names found in the SSL certificate
+    :rtype: list[str]
+    """
+
+    san = cert.extensions.get_extension_for_class(x509.SubjectAlternativeName).value.get_values_for_type(x509.DNSName)
+    record_ids: list[str] = []
+
+    for record in dns_records:
+        record_domain = re.search(r"^(_443|_25)\.(_tcp|_udp)\.(.*)$", record["name"])
+        for domain in san:
+            if record_domain is not None and record_domain.group(3) == domain:
+                record_ids.append(record["id"])
+                break
+
+    return record_ids
 
 
 def create_dns_records(

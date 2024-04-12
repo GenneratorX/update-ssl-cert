@@ -62,7 +62,12 @@ def main():
         log.critical("could not get DNS records from zone. Reason: %s", e)
         sys.exit(1)
 
-    record_ids = filter_dns_records(dns_records, cert)
+    record_ids: list[str] = []
+    if args.delete_all:
+        for record in dns_records:
+            record_ids.append(record["id"])
+    else:
+        record_ids = filter_dns_records(dns_records, cert)
     log.info("found %d TLSA DNS records (%d will be removed)", len(dns_records), len(record_ids))
 
     if len(record_ids) != 0:
@@ -273,7 +278,14 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--h3",
         default=False,
-        help="Enables the creation of TLSA entries for HTTP3 clients",
+        help="Enables the creation of TLSA records for HTTP3 clients",
+        action="store_true",
+    )
+
+    parser.add_argument(
+        "--delete_all",
+        default=False,
+        help="Enables the deletion of all TLSA records found",
         action="store_true",
     )
 

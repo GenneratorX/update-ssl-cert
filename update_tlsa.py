@@ -24,21 +24,17 @@ def main():
 
     if args.api_token is None:
         log.critical("--api_token parameter missing and API_TOKEN environment variable is empty")
-        sys.exit(1)
 
     if args.cert_path is None:
         log.critical("--cert_path parameter missing and CERT_PATH environment variable is empty")
-        sys.exit(1)
 
     log.info("parsing certificate file")
     try:
         cert = parse_cert(args.cert_path)
     except IOError as e:
         log.critical("could not open certificate file. Reason: %s", e.strerror)
-        sys.exit(1)
     except ValueError as e:
         log.critical("could not parse certificate file. Reason: %s", e)
-        sys.exit(1)
 
     log.info("creating CloudFlare API client")
     cf = CloudFlare.CloudFlare(token=args.api_token)
@@ -49,10 +45,8 @@ def main():
         zones = cf.zones.get(params={"name": common_name})
     except CloudFlare.exceptions.CloudFlareAPIError as e:
         log.critical("could not get zone for domain. Reason: %s", e)
-        sys.exit(1)
     if len(zones) != 1:
         log.critical("could not find zone for domain")
-        sys.exit(1)
     zone_id: str = zones[0]["id"]
 
     log.info("getting TLSA DNS records from zone")
@@ -60,7 +54,6 @@ def main():
         dns_records = cf.zones.dns_records.get(zone_id, params={"type": "TLSA"})
     except CloudFlare.exceptions.CloudFlareAPIError as e:
         log.critical("could not get DNS records from zone. Reason: %s", e)
-        sys.exit(1)
 
     record_ids: list[str] = []
     if args.delete_all:
@@ -293,6 +286,16 @@ def parse_args() -> argparse.Namespace:
     return args
 
 
+class ExitOnErrorHandler(logging.StreamHandler):
+    """
+    Handler that exits the program when a critical error happens
+    """
+
+    def emit(self, record):
+        if record.levelno == logging.CRITICAL:
+            sys.exit(1)
+
+
 def init_logger() -> logging.Logger:
     """
     Initialize logger with custom settings
@@ -313,6 +316,7 @@ def init_logger() -> logging.Logger:
     stream_handler.setFormatter(formatter)
 
     logger.addHandler(stream_handler)
+    logger.addHandler(ExitOnErrorHandler())
 
     return logger
 

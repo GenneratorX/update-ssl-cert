@@ -20,6 +20,6 @@ pyRFC3339==1.1
 pytz==2024.1
 PyYAML==6.0.1
 requests==2.31.0
-setuptools==69.2.0
+setuptools==69.5.1
 six==1.16.0
 urllib3==2.2.1

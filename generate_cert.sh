@@ -1,6 +1,13 @@
 #!/bin/bash
 set -eu
 
+LOG_PATH="/var/log/cert-renew.log"
+
+# Print STDOUT and STDERR to screen and log both to a file
+exec > >(tee -a ${LOG_PATH}) 2>&1
+
+printf "# Started script execution at $(date --iso-8601=seconds) #"
+
 if [ ! -d tmp ]; then
         printf "\n========> Creating 'tmp' directory\n"
         mkdir -m 700 tmp
@@ -65,3 +72,5 @@ mv -n letsencryptCert.pem.$current_timestamp ../cert/certificate_file/
 
 printf "\n========> Cleaning up\n"
 rm -f *
+
+printf "# Ended script execution at $(date --iso-8601=seconds) #\n"

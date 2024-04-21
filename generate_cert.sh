@@ -41,9 +41,6 @@ certbot certonly --config ../certbot/certbot.conf \
                  --dns-cloudflare-credentials ../certbot/cloudflare.conf \
                  --dns-cloudflare-propagation-seconds 30
 
-# Deactivate VENV
-deactivate
-
 current_timestamp=$(date +%s)
 
 printf "\n========> Renaming certificate files\n"
@@ -72,5 +69,12 @@ mv -n letsencryptCert.pem.$current_timestamp ../cert/certificate_file/
 
 printf "\n========> Cleaning up\n"
 rm -f *
+
+printf "\n========> Updating TLSA DNS records\n"
+cd ..
+./update_tlsa.py --cert_path "./cert/certificate_file/letsencryptCert.pem.$current_timestamp" --h3
+
+# Deactivate VENV
+deactivate
 
 printf "# Ended script execution at $(date --iso-8601=seconds) #\n"

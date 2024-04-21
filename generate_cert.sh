@@ -44,11 +44,11 @@ certbot certonly --config ../certbot/certbot.conf \
 current_timestamp=$(date +%s)
 
 printf "\n========> Renaming certificate files\n"
-printf " 0000_cert.pem  -> letsencryptCert.pem.$current_timestamp\n"
+printf "0000_cert.pem  -> letsencryptCert.pem.$current_timestamp\n"
 mv -f 0000_cert.pem letsencryptCert.pem.$current_timestamp
-printf " 0000_chain.pem -> letsencryptChain.pem\n"
+printf "0000_chain.pem -> letsencryptChain.pem\n"
 mv -f 0000_chain.pem letsencryptChain.pem
-printf " 0001_chain.pem -> letsencryptFullchain.pem\n"
+printf "0001_chain.pem -> letsencryptFullchain.pem\n"
 mv -f 0001_chain.pem letsencryptFullchain.pem
 
 printf "\n========> Fixing file permissions\n"

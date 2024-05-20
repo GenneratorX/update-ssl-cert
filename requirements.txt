@@ -5,10 +5,10 @@ certbot-dns-cloudflare==2.10.0
 certifi==2024.2.2
 cffi==1.16.0
 charset-normalizer==3.3.2
-cloudflare==2.19.4
+cloudflare==2.20.0
 ConfigArgParse==1.7
 configobj==5.0.8
-cryptography==42.0.5
+cryptography==42.0.7
 distro==1.9.0
 idna==3.7
 josepy==1.14.0

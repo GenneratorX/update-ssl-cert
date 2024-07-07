@@ -2,7 +2,7 @@ acme==2.11.0
 attrs==23.2.0
 certbot==2.11.0
 certbot-dns-cloudflare==2.11.0
-certifi==2024.6.2
+certifi==2024.7.4
 cffi==1.16.0
 charset-normalizer==3.3.2
 cloudflare==2.19.4
@@ -20,6 +20,6 @@ pyRFC3339==1.1
 pytz==2024.1
 PyYAML==6.0.1
 requests==2.32.3
-setuptools==70.1.0
+setuptools==70.2.0
 six==1.16.0
 urllib3==2.2.2

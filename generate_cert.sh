@@ -36,7 +36,6 @@ cd tmp
 certbot certonly \
         --config ../certbot/certbot.conf \
         --csr csr \
-        --staging \
         --must-staple \
         --staple-ocsp \
         --dns-cloudflare \

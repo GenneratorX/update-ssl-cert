@@ -1,4 +1,6 @@
 #!/usr/bin/env python
+# pyright: reportPossiblyUnboundVariable=false
+
 import argparse
 import hashlib
 import logging

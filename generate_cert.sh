@@ -13,6 +13,8 @@ CERT_KEY_NAME='letsencryptCert.pem'
 CHAIN_KEY_NAME='letsencryptChain.pem'
 FULLCHAIN_KEY_NAME='letsencryptFullchain.pem'
 
+CERTBOT_NOTIFICATION_EMAIL='fake@email.com'
+
 # Print STDOUT and STDERR to screen and log both to a file
 exec > >(tee -a "$LOG_PATH") 2>&1
 
@@ -69,6 +71,9 @@ certbot certonly \
         --config-dir "$CONF_PATH/certbot/config" \
         --work-dir "$CONF_PATH/certbot/work" \
         --logs-dir "$CONF_PATH/certbot/logs" \
+        --non-interactive \
+        --agree-tos \
+        --email "$CERTBOT_NOTIFICATION_EMAIL" \
         --csr 'csr' \
         --dns-cloudflare \
         --dns-cloudflare-credentials "$CONF_PATH/cloudflare.conf" \

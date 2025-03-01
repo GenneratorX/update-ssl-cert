@@ -5,6 +5,7 @@ LOG_PATH='/var/log/cert-renew.log'
 TMP_PATH="$PWD/tmp"
 CERT_PATH="$PWD/backup"
 CONF_PATH="$PWD/config"
+VENV_PATH="$PWD/.venv"
 
 PRIVATE_KEY_TYPE='prime256v1'
 
@@ -31,6 +32,11 @@ fi
 if [ ! -d "$CERT_PATH" ]; then
         echo "========> Creating backup certificate directory"
         install -m 700 -d "$CERT_PATH" "$CERT_PATH/cert_file"
+fi
+
+if [ ! -f "$VENV_PATH/pyvenv.cfg" ]; then
+        echo "========> Creating python virtual env"
+        python3 -m venv "$VENV_PATH"
 fi
 
 if [ ! -d "$CONF_PATH" ]; then
@@ -63,7 +69,12 @@ echo "========> Verifying CSR"
 openssl req -text -noout -verify -in "$TMP_PATH/csr"
 
 # Activate VENV
-. .venv/bin/activate
+# shellcheck source=./.venv/bin/activate
+. "$VENV_PATH/bin/activate"
+
+echo "========> Updating python dependencies"
+pip install -U pip
+pip install -r 'requirements.txt'
 
 echo "========> Obtaining SSL certificate from LetsEncrypt using CertBot"
 cd "$TMP_PATH"

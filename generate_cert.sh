@@ -36,8 +36,6 @@ cd tmp
 certbot certonly \
         --config ../certbot/certbot.conf \
         --csr csr \
-        --must-staple \
-        --staple-ocsp \
         --dns-cloudflare \
         --dns-cloudflare-credentials ../certbot/cloudflare.conf \
         --dns-cloudflare-propagation-seconds 30

@@ -1,7 +1,7 @@
-acme==3.2.0
-attrs==25.1.0
-certbot==3.2.0
-certbot-dns-cloudflare==3.2.0
+acme==3.3.0
+attrs==25.3.0
+certbot==3.3.0
+certbot-dns-cloudflare==3.3.0
 certifi==2025.1.31
 cffi==1.17.1
 charset-normalizer==3.4.1

@@ -13,11 +13,13 @@ from cryptography import x509
 from cryptography.x509.oid import NameOID
 from cryptography.hazmat.primitives.serialization import Encoding, PublicFormat
 from typing import NamedTuple
+from tldextract import TLDExtract
 
 import CloudFlare
 import CloudFlare.exceptions
 
 MAX_PARALLEL_TASKS = 20
+TLD_CACHE_DIR = None
 
 
 def main():
@@ -42,9 +44,11 @@ def main():
     cf = CloudFlare.CloudFlare(token=args.api_token)
 
     common_name = cert.subject.get_attributes_for_oid(NameOID.COMMON_NAME)[0].value
-    log.info("getting zone for domain '%s'", common_name)
+    tld_extract = TLDExtract(cache_dir=TLD_CACHE_DIR).extract_str(common_name)  # pyright: ignore reportArgumentType
+    dns_zone = tld_extract.domain + "." + tld_extract.suffix
+    log.info("getting zone for domain '%s'", dns_zone)
     try:
-        zones = cf.zones.get(params={"name": common_name})
+        zones = cf.zones.get(params={"name": dns_zone})
     except CloudFlare.exceptions.CloudFlareAPIError as e:
         log.critical("could not get zone for domain. Reason: %s", e)
     if len(zones) != 1:

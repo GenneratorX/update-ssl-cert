@@ -2,7 +2,7 @@ acme==5.2.2
 attrs==25.4.0
 certbot==5.2.2
 certbot-dns-cloudflare==5.2.2
-certifi==2025.11.12
+certifi==2026.1.4
 cffi==2.0.0
 charset-normalizer==3.4.4
 cloudflare==2.19.4
@@ -10,7 +10,7 @@ ConfigArgParse==1.7.1
 configobj==5.0.9
 cryptography==46.0.3
 distro==1.9.0
-filelock==3.20.1
+filelock==3.20.3
 idna==3.11
 josepy==2.2.0
 jsonlines==4.0.0
@@ -21,5 +21,5 @@ pyRFC3339==2.1.0
 PyYAML==6.0.3
 requests==2.32.5
 requests-file==3.0.1
-tldextract==5.3.0
-urllib3==2.6.2
+tldextract==5.3.1
+urllib3==2.6.3

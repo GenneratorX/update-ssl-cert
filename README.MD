@@ -1,4 +1,5 @@
 ⚠️ ARCHIVED REPOSITORY ⚠️
+
 Decided to use OpenTofu with acme/cloudflare/tls providers to generate SSL certificates and populate DNS records appropriately since I'm already using it to manage my infrastructure.
 
 # Script for automating the creation of SSL certificates
